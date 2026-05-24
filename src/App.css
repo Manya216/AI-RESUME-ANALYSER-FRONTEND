@@ -1,297 +1,117 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+/* AUTH FIX */
 
-/* RESET & BASE */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+.auth-section {
 
-body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background: radial-gradient(circle at top right, #f472b6, transparent 40%),
-              radial-gradient(circle at bottom left, #38bdf8, transparent 40%),
-              #fafafa;
-  color: #1e293b;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-}
-
-/* APP WRAPPER (Make sure your HTML wraps everything in this or a container class) */
-.main-container {
   width: 100%;
-  max-width: 900px;
-  background: rgba(255, 255, 255, 0.45);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  border-radius: 24px;
-  padding: 2.5rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
-}
 
-/* TOP HEADER BAR */
-.top-bar {
+  max-width: 500px;
+
+  margin: auto;
+
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  padding-bottom: 1.5rem;
-}
 
-.title {
-  font-size: 36px;
-  font-weight: 800;
-  letter-spacing: -1px;
-  background: linear-gradient(135deg, #0f172a 0%, #475569 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.subtitle {
-  text-align: center;
-  color: #64748b;
-  font-size: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-/* BUTTONS */
-button, .clear-history-btn {
-  cursor: pointer;
-  border: none;
-  font-family: inherit;
-  font-weight: 600;
-  font-size: 14px;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.logout-btn {
-  padding: 8px 16px;
-  background: #fee2e2;
-  color: #ef4444;
-}
-
-.logout-btn:hover {
-  background: #fca5a5;
-  color: #991b1b;
-}
-
-/* FILE UPLOAD INTERFACE */
-.upload-container {
-  background: rgba(255, 255, 255, 0.8);
-  border: 2px dashed #cbd5e1;
-  border-radius: 16px;
-  padding: 2rem;
-  text-align: center;
-  transition: border-color 0.2s ease;
-  margin-bottom: 2rem;
-}
-
-.upload-container:hover {
-  border-color: #6366f1;
-}
-
-input[type="file"] {
-  font-family: inherit;
-  color: #64748b;
-  background: transparent;
-  padding: 10px;
-}
-
-.upload-btn {
-  margin-top: 1rem;
-  padding: 12px 24px;
-  background: #0f172a;
-  color: #ffffff;
-  width: auto;
-  min-width: 160px;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
-}
-
-.upload-btn:hover {
-  background: #1e293b;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.2);
-}
-
-/* RESULTS GRID & STATS */
-.results-section {
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 20px;
-  padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
-  margin-bottom: 2.5rem;
-}
-
-.score-display {
-  display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-bottom: 1.5rem;
+
+  gap: 18px;
+
+  padding: 20px;
 }
 
-.ats-label {
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: #64748b;
-  font-weight: 700;
-}
 
-.big-text {
-  font-size: 72px;
+/* AUTH TITLE */
+
+.auth-section h2 {
+
+  text-align: center;
+
+  font-size: 48px;
+
   font-weight: 800;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  line-height: 1;
-  margin: 0.5rem 0;
-}
 
-.role-text {
-  font-size: 18px;
-  font-weight: 600;
-  color: #4f46e5;
-  background: #eef2ff;
-  padding: 6px 16px;
-  border-radius: 99px;
-  display: inline-block;
-  margin-bottom: 2rem;
-}
+  margin-bottom: 10px;
 
-/* REPAIRING THE DIRTY BULLET LIST (SKILLS) */
-.skills-heading {
-  font-size: 14px;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #475569;
-  letter-spacing: 0.5px;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-/* Ensure your <ul> features this class to drop the bullets completely */
-.skills-container {
-  list-style: none; /* Kills the floating bullets */
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  max-width: 600px;
-  margin: 0 auto 2rem auto;
-}
-
-.skills-container li {
-  background: #ffffff;
-  color: #334155;
-  font-size: 13px;
-  font-weight: 500;
-  padding: 6px 14px;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-  text-transform: capitalize;
-}
-
-/* SUGGESTIONS SECTION */
-.suggestions-panel {
-  text-align: center;
-  color: #64748b;
-  font-size: 14px;
-  font-style: italic;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.02);
-  border-radius: 12px;
-}
-
-/* HISTORY SECTION */
-.history-section {
-  margin-top: 3rem;
-  border-top: 1px dashed #cbd5e1;
-  padding-top: 2rem;
-}
-
-.history-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.history-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: #1e293b;
-}
-
-.clear-history-btn {
-  background: transparent;
-  color: #64748b;
-  font-size: 13px;
-  padding: 6px 12px;
-  border: 1px solid #cbd5e1;
-}
-
-.clear-history-btn:hover {
-  background: #f1f5f9;
-  color: #1e293b;
-}
-
-.history-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #ffffff;
-  padding: 1rem 1.5rem;
-  border-radius: 14px;
-  border: 1px solid #e2e8f0;
-  margin-bottom: 0.75rem;
-}
-
-.history-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.history-file {
-  font-weight: 600;
-  font-size: 14px;
   color: #0f172a;
 }
 
-.history-role {
-  font-size: 12px;
-  color: #64748b;
+
+/* INPUTS */
+
+.auth-section input {
+
+  width: 100%;
+
+  padding: 16px 18px;
+
+  border-radius: 14px;
+
+  border: 1px solid #cbd5e1;
+
+  background: rgba(255,255,255,0.8);
+
+  font-size: 15px;
+
+  outline: none;
+
+  transition: 0.25s ease;
 }
 
-.history-score-badge {
-  font-weight: 700;
-  color: #059669;
-  background: #ecfdf5;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 13px;
+.auth-section input:focus {
+
+  border-color: #6366f1;
+
+  box-shadow:
+    0 0 0 4px rgba(99,102,241,0.12);
 }
 
-.hide-btn {
-  padding: 6px 12px;
-  background: #f87171;
+
+/* BUTTON ROW */
+
+.auth-buttons {
+
+  display: flex;
+
+  gap: 14px;
+
+  margin-top: 10px;
+}
+
+
+/* BUTTONS */
+
+.auth-buttons button {
+
+  flex: 1;
+
+  padding: 15px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  background: linear-gradient(
+    135deg,
+    #6366f1,
+    #8b5cf6
+  );
+
   color: white;
-  font-size: 12px;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.25s ease;
+
+  box-shadow:
+    0 10px 25px rgba(99,102,241,0.2);
 }
 
-.hide-btn:hover {
-  background: #ef4444;
+.auth-buttons button:hover {
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 15px 35px rgba(99,102,241,0.3);
 }
