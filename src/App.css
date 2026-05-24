@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
-/* RESET & BASE */
+/* ==========================================================================
+   1. RESET & BASE STYLES
+   ========================================================================== */
 * {
   margin: 0;
   padding: 0;
@@ -9,8 +11,8 @@
 
 body {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  background: radial-gradient(circle at top right, #f472b6, transparent 40%),
-              radial-gradient(circle at bottom left, #38bdf8, transparent 40%),
+  background: radial-gradient(circle at top right, #f5d0fe, transparent 45%),
+              radial-gradient(circle at bottom left, #dbeafe, transparent 45%),
               #fafafa;
   color: #1e293b;
   min-height: 100vh;
@@ -20,10 +22,12 @@ body {
   padding: 2rem;
 }
 
-/* APP WRAPPER (Make sure your HTML wraps everything in this or a container class) */
+/* ==========================================================================
+   2. LAYOUT CONTAINER (GLASSMORPHISM CARD)
+   ========================================================================== */
 .main-container {
   width: 100%;
-  max-width: 900px;
+  max-width: 950px;
   background: rgba(255, 255, 255, 0.45);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -33,34 +37,41 @@ body {
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
 }
 
-/* TOP HEADER BAR */
+/* ==========================================================================
+   3. TOP HEADER BAR & NAVIGATION
+   ========================================================================== */
 .top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   padding-bottom: 1.5rem;
 }
 
+/* Fixed Text-Clipping Issue using padding-right and inline-block */
 .title {
-  font-size: 36px;
+  font-size: 38px;
   font-weight: 800;
   letter-spacing: -1px;
+  display: inline-block;
   background: linear-gradient(135deg, #0f172a 0%, #475569 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  padding-right: 0.2em; 
 }
 
 .subtitle {
   text-align: center;
   color: #64748b;
-  font-size: 1rem;
-  margin-bottom: 1.5rem;
+  font-size: 1.05rem;
+  margin-bottom: 2rem;
 }
 
-/* BUTTONS */
+/* ==========================================================================
+   4. BUTTONS & INPUTS
+   ========================================================================== */
 button, .clear-history-btn {
   cursor: pointer;
   border: none;
@@ -74,8 +85,12 @@ button, .clear-history-btn {
   justify-content: center;
 }
 
+button:active {
+  transform: scale(0.98);
+}
+
 .logout-btn {
-  padding: 8px 16px;
+  padding: 10px 20px;
   background: #fee2e2;
   color: #ef4444;
 }
@@ -85,141 +100,150 @@ button, .clear-history-btn {
   color: #991b1b;
 }
 
-/* FILE UPLOAD INTERFACE */
+/* FILE UPLOAD ZONE */
 .upload-container {
   background: rgba(255, 255, 255, 0.8);
   border: 2px dashed #cbd5e1;
   border-radius: 16px;
-  padding: 2rem;
+  padding: 2.5rem 2rem;
   text-align: center;
-  transition: border-color 0.2s ease;
-  margin-bottom: 2rem;
+  transition: all 0.2s ease;
+  margin-bottom: 2.5rem;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.01);
 }
 
 .upload-container:hover {
   border-color: #6366f1;
+  background: rgba(255, 255, 255, 0.95);
 }
 
 input[type="file"] {
   font-family: inherit;
-  color: #64748b;
-  background: transparent;
-  padding: 10px;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 .upload-btn {
-  margin-top: 1rem;
-  padding: 12px 24px;
+  margin-top: 1.25rem;
+  padding: 14px 32px;
   background: #0f172a;
   color: #ffffff;
   width: auto;
-  min-width: 160px;
+  min-width: 180px;
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
 }
 
 .upload-btn:hover {
   background: #1e293b;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.25);
 }
 
-/* RESULTS GRID & STATS */
+/* ==========================================================================
+   5. RESULTS SECTION (SCORE & ROLES)
+   ========================================================================== */
 .results-section {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.75);
   border-radius: 20px;
-  padding: 2rem;
+  padding: 2.5rem;
   border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
-  margin-bottom: 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.015);
+  text-align: center;
+  margin-bottom: 3rem;
 }
 
 .score-display {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .ats-label {
-  font-size: 14px;
+  font-size: 13px;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
   color: #64748b;
   font-weight: 700;
 }
 
 .big-text {
-  font-size: 72px;
+  font-size: 84px;
   font-weight: 800;
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  line-height: 1;
-  margin: 0.5rem 0;
+  line-height: 1.1;
+  margin: 0.25rem 0;
 }
 
 .role-text {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   color: #4f46e5;
   background: #eef2ff;
-  padding: 6px 16px;
+  padding: 8px 20px;
   border-radius: 99px;
   display: inline-block;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.3px;
 }
 
-/* REPAIRING THE DIRTY BULLET LIST (SKILLS) */
+/* SKILLS CHIPS CONFIGURATION (Fixes list formatting) */
 .skills-heading {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
   color: #475569;
-  letter-spacing: 0.5px;
-  margin-bottom: 1rem;
-  text-align: center;
+  letter-spacing: 1px;
+  margin-bottom: 1.25rem;
 }
 
-/* Ensure your <ul> features this class to drop the bullets completely */
 .skills-container {
-  list-style: none; /* Kills the floating bullets */
+  list-style: none; /* Safely removes old bullet circles */
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
-  max-width: 600px;
-  margin: 0 auto 2rem auto;
+  gap: 10px;
+  max-width: 650px;
+  margin: 0 auto 2.5rem auto;
 }
 
 .skills-container li {
   background: #ffffff;
   color: #334155;
-  font-size: 13px;
-  font-weight: 500;
-  padding: 6px 14px;
-  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 10px;
   border: 1px solid #e2e8f0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
   text-transform: capitalize;
 }
 
-/* SUGGESTIONS SECTION */
+/* SUGGESTIONS BOX */
 .suggestions-panel {
-  text-align: center;
-  color: #64748b;
+  color: #475569;
   font-size: 14px;
-  font-style: italic;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.02);
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.5);
   border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
-/* HISTORY SECTION */
+/* ==========================================================================
+   6. USER RESUME HISTORY SECTION
+   ========================================================================== */
 .history-section {
   margin-top: 3rem;
   border-top: 1px dashed #cbd5e1;
-  padding-top: 2rem;
+  padding-top: 2.5rem;
 }
 
 .history-header {
@@ -230,22 +254,25 @@ input[type="file"] {
 }
 
 .history-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
-  color: #1e293b;
+  color: #0f172a;
+  letter-spacing: -0.5px;
 }
 
 .clear-history-btn {
   background: transparent;
   color: #64748b;
   font-size: 13px;
-  padding: 6px 12px;
+  padding: 8px 16px;
   border: 1px solid #cbd5e1;
+  background: rgba(255,255,255,0.4);
 }
 
 .clear-history-btn:hover {
   background: #f1f5f9;
   color: #1e293b;
+  border-color: #94a3b8;
 }
 
 .history-card {
@@ -253,45 +280,92 @@ input[type="file"] {
   justify-content: space-between;
   align-items: center;
   background: #ffffff;
-  padding: 1rem 1.5rem;
-  border-radius: 14px;
+  padding: 1.25rem 1.75rem;
+  border-radius: 16px;
   border: 1px solid #e2e8f0;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.01);
+  transition: transform 0.2s ease;
+}
+
+.history-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.02);
 }
 
 .history-meta {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .history-file {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 15px;
   color: #0f172a;
 }
 
 .history-role {
-  font-size: 12px;
+  font-size: 13px;
   color: #64748b;
+}
+
+.history-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .history-score-badge {
   font-weight: 700;
   color: #059669;
   background: #ecfdf5;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 14px;
 }
 
 .hide-btn {
-  padding: 6px 12px;
-  background: #f87171;
-  color: white;
-  font-size: 12px;
+  padding: 8px 14px;
+  background: #fee2e2;
+  color: #ef4444;
+  font-size: 13px;
 }
 
 .hide-btn:hover {
-  background: #ef4444;
+  background: #fca5a5;
+  color: #991b1b;
+}
+
+/* ==========================================================================
+   7. UTILITIES & RESPONSIVENESS
+   ========================================================================== */
+.loading {
+  text-align: center;
+  font-weight: 600;
+  color: #4f46e5;
+  padding: 2rem;
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 1rem;
+  }
+  .main-container {
+    padding: 1.5rem;
+  }
+  .top-bar {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  .history-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .history-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
 }
