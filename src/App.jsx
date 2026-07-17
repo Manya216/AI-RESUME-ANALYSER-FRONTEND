@@ -1,499 +1,1078 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
-const API = "https://ai-resume-analyser-backend-3.onrender.com";
 
-function App() {
+const API =  "http://localhost:8000";
 
-  // AUTH
 
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+function App(){
 
-  const [token, setToken] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // RESUME
+const [username,setUsername]=useState("");
 
-  const [file, setFile] = useState(null);
+const [email,setEmail]=useState("");
 
-  const [result, setResult] = useState(null);
+const [password,setPassword]=useState("");
 
-  const [loading, setLoading] = useState(false);
 
-  const [history, setHistory] = useState([]);
 
-  const [hiddenIds, setHiddenIds] = useState([]);
+const [isLoggedIn,setIsLoggedIn]=useState(false);
 
-  // AUTO LOGIN
 
-  useEffect(() => {
 
-    const savedToken = localStorage.getItem("token");
+const [file,setFile]=useState(null);
 
-    if (savedToken) {
+const [jobDescription,setJobDescription]=useState("");
 
-      setToken(savedToken);
+const [result,setResult]=useState(null);
 
-      setIsLoggedIn(true);
+const [loading,setLoading]=useState(false);
 
-      fetchHistory(savedToken);
-    }
 
-  }, []);
 
-  // FILE INPUT
+const [history,setHistory]=useState([]);
 
-  function handleFileChange(e) {
+const [hiddenIds,setHiddenIds]=useState([]);
 
-    setFile(e.target.files[0]);
-  }
 
-  // SIGNUP
 
-  async function signup() {
 
-    const res = await fetch(`${API}/signup`, {
+const [message,setMessage]=useState("");
 
-      method: "POST",
+const [chat,setChat]=useState([]);
 
-      headers: {
+const [chatLoading,setChatLoading]=useState(false);
 
-        "Content-Type": "application/json"
-      },
 
-      body: JSON.stringify({
 
-        username,
-        email,
-        password
-      })
-    });
 
-    const data = await res.json();
 
-    alert(data.message || "Signup completed");
-  }
+// -----------------------------
+// CHECK LOGIN ON PAGE LOAD
+// -----------------------------
 
-  // LOGIN
+useEffect(()=>{
 
-  async function login() {
+checkLogin();
 
-    const res = await fetch(`${API}/login`, {
+},[]);
 
-      method: "POST",
 
-      headers: {
 
-        "Content-Type": "application/json"
-      },
+async function checkLogin(){
 
-      body: JSON.stringify({
 
-        email,
-        password
-      })
-    });
+try{
 
-    const data = await res.json();
 
-    if (data.access_token) {
+const res=await fetch(
 
-      setToken(data.access_token);
+`${API}/resumes`,
 
-      localStorage.setItem(
-        "token",
-        data.access_token
-      );
+{
 
-      setIsLoggedIn(true);
+credentials:"include"
 
-      fetchHistory(data.access_token);
-
-    } else {
-
-      alert(data.message || "Login failed");
-    }
-  }
-
-  // LOGOUT
-
-  function logout() {
-
-    localStorage.removeItem("token");
-
-    setToken("");
-
-    setIsLoggedIn(false);
-
-    setResult(null);
-
-    setHistory([]);
-
-    setHiddenIds([]);
-  }
-
-  // FETCH HISTORY
-
-  async function fetchHistory(tokenValue) {
-
-    const res = await fetch(`${API}/resumes`, {
-
-      headers: {
-
-        Authorization: `Bearer ${tokenValue || token}`,
-      },
-    });
-
-    const data = await res.json();
-
-    setHistory(data);
-  }
-
-  // UPLOAD RESUME
-
-  async function uploadResume() {
-
-    if (!file) {
-
-      alert("Please select a file");
-
-      return;
-    }
-
-    setLoading(true);
-
-    const formData = new FormData();
-
-    formData.append("file", file);
-
-    const res = await fetch(`${API}/upload`, {
-
-      method: "POST",
-
-      headers: {
-
-        Authorization: `Bearer ${token}`,
-      },
-
-      body: formData,
-    });
-
-    const data = await res.json();
-
-    setResult(data);
-
-    setLoading(false);
-
-    fetchHistory(token);
-  }
-
-  // REMOVE SINGLE
-
-  function hideResume(id) {
-
-    setHiddenIds([...hiddenIds, id]);
-  }
-
-  // CLEAR HISTORY
-
-  function clearAllHistory() {
-
-    setHistory([]);
-
-    setHiddenIds([]);
-  }
-
-  const visibleHistory = history.filter(
-
-    (item) => !hiddenIds.includes(item.id)
-  );
-
-  return (
-
-    <div className="main-container">
-
-      <div className="card">
-
-        {/* AUTH SECTION */}
-
-        {!isLoggedIn && (
-
-          <div className="auth-section">
-
-            <h2>
-
-              Authentication
-
-            </h2>
-
-            <input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) =>
-                setUsername(e.target.value)
-              }
-            />
-
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) =>
-                setEmail(e.target.value)
-              }
-            />
-
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) =>
-                setPassword(e.target.value)
-              }
-            />
-
-            <div className="auth-buttons">
-
-              <button onClick={signup}>
-
-                Signup
-
-              </button>
-
-              <button onClick={login}>
-
-                Login
-
-              </button>
-
-            </div>
-
-          </div>
-        )}
-
-        {/* MAIN APP */}
-
-        {isLoggedIn && (
-
-          <>
-
-            {/* TOP BAR */}
-
-            <div className="top-bar">
-
-              <h1 className="title">
-
-                AI Resume Analyzer
-
-              </h1>
-
-              <button
-                className="logout-btn"
-                onClick={logout}
-              >
-
-                Logout
-
-              </button>
-
-            </div>
-
-            {/* SUBTITLE */}
-
-            <p className="subtitle">
-
-              Upload resume and get ATS score instantly
-
-            </p>
-
-            {/* UPLOAD SECTION */}
-
-            <div className="upload-container">
-
-              <input
-                type="file"
-                onChange={handleFileChange}
-              />
-
-              <br />
-
-              <button
-                className="upload-btn"
-                onClick={uploadResume}
-              >
-
-                Upload Resume
-
-              </button>
-
-            </div>
-
-            {/* LOADING */}
-
-            {loading && (
-
-              <p className="subtitle">
-
-                Analyzing Resume...
-
-              </p>
-            )}
-
-            {/* RESULT */}
-
-            {result && (
-
-              <div className="results-section">
-
-                {/* SCORE */}
-
-                <div className="score-display">
-
-                  <p className="ats-label">
-
-                    ATS Score
-
-                  </p>
-
-                  <p className="big-text">
-
-                    {result.analysis?.resume_score}
-
-                  </p>
-
-                  <p className="role-text">
-
-                    {result.analysis?.predicted_role}
-
-                  </p>
-
-                </div>
-
-                {/* SKILLS */}
-
-                <div className="skills-section">
-
-                  <h3 className="skills-heading">
-
-                    Skills Found
-
-                  </h3>
-
-                  <ul className="skills-container">
-
-                    {(result.analysis?.skills_found || []).map(
-
-                      (skill, index) => (
-
-                        <li key={index}>
-
-                          {skill}
-
-                        </li>
-                      )
-                    )}
-
-                  </ul>
-
-                </div>
-
-                {/* SUGGESTIONS */}
-
-                <div className="suggestions-panel">
-
-                  <h3 style={{ marginBottom: "10px" }}>
-
-                    Suggestions
-
-                  </h3>
-
-                  {(result.analysis?.suggestions || []).length > 0
-
-                    ? result.analysis.suggestions.join(" • ")
-
-                    : "No suggestions available"}
-
-                </div>
-
-                {/* HISTORY */}
-
-                <div className="history-section">
-
-                  <div className="history-header">
-
-                    <h2 className="history-title">
-
-                      Resume History
-
-                    </h2>
-
-                    <button
-                      className="clear-history-btn"
-                      onClick={clearAllHistory}
-                    >
-
-                      Clear History
-
-                    </button>
-
-                  </div>
-
-                  {visibleHistory.map((item) => (
-
-                    <div
-                      className="history-card"
-                      key={item.id}
-                    >
-
-                      <div className="history-meta">
-
-                        <p className="history-file">
-
-                          {item.filename}
-
-                        </p>
-
-                        <p className="history-role">
-
-                          {item.role}
-
-                        </p>
-
-                      </div>
-
-                      <div className="history-score-badge">
-
-                        {item.score}
-
-                      </div>
-
-                      <button
-                        className="hide-btn"
-                        onClick={() => hideResume(item.id)}
-                      >
-
-                        Remove
-
-                      </button>
-
-                    </div>
-                  ))}
-
-                </div>
-
-              </div>
-            )}
-
-          </>
-        )}
-
-      </div>
-
-    </div>
-  );
 }
+
+);
+
+
+
+if(res.ok){
+
+setIsLoggedIn(true);
+
+fetchHistory();
+
+}
+
+
+}
+
+catch(err){
+
+console.log(err);
+
+}
+
+
+}
+
+
+
+
+
+// -----------------------------
+// SIGNUP
+// -----------------------------
+
+async function signup(){
+
+
+try{
+
+
+const res=await fetch(
+
+`${API}/signup`,
+
+{
+
+method:"POST",
+
+credentials:"include",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+body:JSON.stringify({
+
+username,
+
+email,
+
+password
+
+})
+
+}
+
+);
+
+
+
+const data=await res.json();
+
+
+alert(data.message);
+
+
+}
+
+catch(err){
+
+console.log(err);
+
+alert("Signup failed");
+
+}
+
+
+}
+
+
+
+
+
+// -----------------------------
+// LOGIN
+// -----------------------------
+
+
+async function login(){
+
+
+try{
+
+
+const res=await fetch(
+
+`${API}/login`,
+
+{
+
+method:"POST",
+
+credentials:"include",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+body:JSON.stringify({
+
+email,
+
+password
+
+})
+
+}
+
+);
+
+
+
+const data=await res.json();
+
+
+
+if(res.ok){
+
+
+setIsLoggedIn(true);
+
+fetchHistory();
+
+
+}
+
+else{
+
+alert(data.message);
+
+}
+
+
+}
+
+
+catch(err){
+
+console.log(err);
+
+alert("Login failed");
+
+}
+
+
+}
+
+
+
+
+
+// -----------------------------
+// LOGOUT
+// -----------------------------
+
+async function logout(){
+
+
+await fetch(
+
+`${API}/logout`,
+
+{
+
+method:"POST",
+
+credentials:"include"
+
+}
+
+);
+
+
+
+setIsLoggedIn(false);
+
+setResult(null);
+
+setHistory([]);
+
+setChat([]);
+
+}
+
+
+
+
+// -----------------------------
+// HISTORY
+// -----------------------------
+
+
+async function fetchHistory(){
+
+
+try{
+
+
+const res=await fetch(
+
+`${API}/resumes`,
+
+{
+
+credentials:"include"
+
+}
+
+);
+
+
+
+const data=await res.json();
+
+
+setHistory(data);
+
+
+}
+
+catch(err){
+
+console.log(err);
+
+}
+
+
+}
+
+
+
+
+// -----------------------------
+// FILE
+// -----------------------------
+
+
+function handleFileChange(e){
+
+setFile(
+
+e.target.files[0]
+
+);
+
+}
+
+
+
+
+// -----------------------------
+// UPLOAD
+// -----------------------------
+
+
+async function uploadResume(){
+
+
+if(!file){
+
+alert("Select resume");
+
+return;
+
+}
+
+
+
+if(!jobDescription.trim()){
+
+alert("Paste job description");
+
+return;
+
+}
+
+
+
+setLoading(true);
+
+
+
+try{
+
+
+const formData=new FormData();
+
+
+formData.append(
+
+"file",
+
+file
+
+);
+
+
+formData.append(
+
+"job_description",
+
+jobDescription
+
+);
+
+
+
+
+const res=await fetch(
+
+`${API}/upload`,
+
+{
+
+method:"POST",
+
+credentials:"include",
+
+body:formData
+
+}
+
+);
+
+
+
+const data=await res.json();
+
+
+console.log(data);
+
+
+
+setResult(data);
+
+
+fetchHistory();
+
+
+}
+
+catch(err){
+
+console.log(err);
+
+alert("Upload failed");
+
+}
+
+
+
+setLoading(false);
+
+
+}
+// -----------------------------
+// CHAT
+// -----------------------------
+
+async function sendMessage(){
+
+
+if(!message.trim())
+return;
+
+
+
+setChat(prev=>[
+
+...prev,
+
+{
+role:"user",
+text:message
+}
+
+]);
+
+
+
+setChatLoading(true);
+
+
+
+try{
+
+
+const res=await fetch(
+
+`${API}/chat`,
+
+{
+
+method:"POST",
+
+credentials:"include",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+
+body:JSON.stringify({
+
+resume_text:
+result?.resume_text || "",
+
+
+message:message
+
+})
+
+}
+
+);
+
+
+
+const data=await res.json();
+
+
+
+setChat(prev=>[
+
+...prev,
+
+{
+
+role:"ai",
+
+text:data.reply || "No response"
+
+}
+
+]);
+
+
+
+}
+
+catch(err){
+
+
+setChat(prev=>[
+
+...prev,
+
+{
+
+role:"ai",
+
+text:"Backend error"
+
+}
+
+]);
+
+
+}
+
+
+
+setMessage("");
+
+setChatLoading(false);
+
+
+}
+
+
+
+
+
+
+// -----------------------------
+// HIDE HISTORY
+// -----------------------------
+
+
+function hideResume(id){
+
+
+setHiddenIds([
+
+...hiddenIds,
+
+id
+
+]);
+
+
+}
+
+
+
+function clearAllHistory(){
+
+setHistory([]);
+
+setHiddenIds([]);
+
+}
+
+
+
+const visibleHistory = history.filter(
+
+item=>!hiddenIds.includes(item.id)
+
+);
+return (
+
+<div className="main-container">
+
+<div className="card">
+
+
+
+{!isLoggedIn && (
+
+<div className="auth-section">
+
+
+<h2>
+Authentication
+</h2>
+
+
+
+<input
+
+placeholder="Username"
+
+value={username}
+
+onChange={
+e=>setUsername(e.target.value)
+}
+
+/>
+
+
+
+<input
+
+placeholder="Email"
+
+value={email}
+
+onChange={
+e=>setEmail(e.target.value)
+}
+
+/>
+
+
+
+<input
+
+type="password"
+
+placeholder="Password"
+
+value={password}
+
+onChange={
+e=>setPassword(e.target.value)
+}
+
+/>
+
+
+
+<button onClick={signup}>
+Signup
+</button>
+
+
+
+<button onClick={login}>
+Login
+</button>
+
+
+
+</div>
+
+)}
+
+
+
+
+
+
+
+{isLoggedIn && (
+
+<>
+
+
+<div className="top-bar">
+
+
+<h1>
+AI Resume Analyzer
+</h1>
+
+
+
+<button onClick={logout}>
+Logout
+</button>
+
+
+</div>
+
+
+
+
+
+
+<div className="upload-container">
+
+
+<input
+
+type="file"
+
+onChange={handleFileChange}
+
+/>
+
+
+
+
+<textarea
+
+placeholder="Paste Job Description"
+
+value={jobDescription}
+
+onChange={
+e=>setJobDescription(e.target.value)
+}
+
+/>
+
+
+
+<button onClick={uploadResume}>
+
+Upload Resume
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+{loading &&
+
+<p>
+Analyzing Resume...
+</p>
+
+}
+
+
+
+
+
+{result && (
+
+<div className="results-section">
+
+
+<h2>
+ATS Score
+</h2>
+
+
+<h1>
+
+{result.analysis?.resume_score ?? 0}
+
+</h1>
+
+
+
+<p>
+
+Semantic Match:
+
+{result.analysis?.semantic_match_score ?? 0}%
+
+</p>
+
+
+
+
+
+<h3>
+Matched Skills
+</h3>
+
+
+<ul>
+
+{
+
+(result.analysis?.matched_skills || [])
+
+.map(
+
+(skill,index)=>(
+
+<li key={index}>
+{skill}
+</li>
+
+)
+
+)
+
+}
+
+</ul>
+
+
+
+
+
+<h3>
+Missing Skills
+</h3>
+
+
+<ul>
+
+{
+
+(result.analysis?.missing_skills || [])
+
+.map(
+
+(skill,index)=>(
+
+<li key={index}>
+{skill}
+</li>
+
+)
+
+)
+
+}
+
+</ul>
+
+
+
+
+
+<h3>
+AI Suggestions
+</h3>
+
+
+<p>
+
+{
+
+Array.isArray(result.analysis?.suggestions)
+
+?
+
+result.analysis.suggestions.join(" • ")
+
+:
+
+result.analysis?.suggestions
+
+}
+
+</p>
+
+
+
+
+<div className="chat-container">
+
+
+<h2>
+AI Resume Chat
+</h2>
+
+
+
+<div className="chat-box">
+
+
+{
+
+chat.map(
+
+(msg,index)=>(
+
+<div
+
+key={index}
+
+className={
+msg.role==="user"
+?
+"user-msg"
+:
+"ai-msg"
+}
+
+>
+
+{msg.text}
+
+</div>
+
+)
+
+)
+
+}
+
+
+
+{chatLoading &&
+
+<div className="ai-msg">
+
+Thinking...
+
+</div>
+
+}
+
+
+</div>
+
+
+
+
+<input
+
+value={message}
+
+placeholder="Ask AI about resume"
+
+onChange={
+e=>setMessage(e.target.value)
+}
+
+/>
+
+
+
+<button onClick={sendMessage}>
+
+Send
+
+</button>
+
+
+</div>
+
+
+</div>
+
+)}
+
+
+
+
+
+
+<div className="history-section">
+
+
+<h2>
+Resume History
+</h2>
+
+
+
+<button onClick={clearAllHistory}>
+
+Clear History
+
+</button>
+
+
+
+{
+
+visibleHistory.map(
+
+item=>(
+
+<div
+
+key={item.id}
+
+className="history-card"
+
+>
+
+
+<p>
+{item.filename}
+</p>
+
+
+<p>
+Score: {item.score}
+</p>
+
+
+
+<button
+
+onClick={
+()=>hideResume(item.id)
+}
+
+>
+
+Remove
+
+</button>
+
+
+
+</div>
+
+)
+
+)
+
+}
+
+
+
+</div>
+
+
+
+
+
+</>
+
+)}
+
+
+
+
+</div>
+
+</div>
+
+);
+
+
+}
+
 
 export default App;
